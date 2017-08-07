@@ -2,36 +2,37 @@ from django.shortcuts import render
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 # Create your views here.
-from .forms import ProductAddForm
+from .forms import ProductModelForm
 from .models import Product
 
 def create_view(request):
     print(request.POST)
-    form = ProductAddForm(request.POST or None)
+    form = ProductModelForm(request.POST or None)
 
     ### Reference Code ####
     # if request.method == "POST":
     #     print(request.POST)
-    if form.is_valid():
-        # Getting validated data from our POST
-        data = form.cleaned_data
-        title = data.get("title")
-        description = data.get("description")
-        price = data.get("price")
-
-        # Saving the data to our object inside of our PostGreSQL database
-        # This can be done in two ways actually
-        """ The first way"""
-        #new_object = Product.objects.create(title=title,description=description,price=price)
-
-        """ OR We could do it this way """
-        new_object = Product()
-        new_object.title = title
-        new_object.description = description
-        new_object.price = price
-        new_object.save()
-# Both of the above solutions work roughly the same way^^
-        print(request.POST)
+    #Original form data
+#     if form.is_valid():
+#         # Getting validated data from our POST
+#         data = form.cleaned_data
+#         title = data.get("title")
+#         description = data.get("description")
+#         price = data.get("price")
+#
+#         # Saving the data to our object inside of our PostGreSQL database
+#         # This can be done in two ways actually
+#         """ The first way"""
+#         #new_object = Product.objects.create(title=title,description=description,price=price)
+#
+#         """ OR We could do it this way """
+#         new_object = Product()
+#         new_object.title = title
+#         new_object.description = description
+#         new_object.price = price
+#         new_object.save()
+# # Both of the above solutions work roughly the same way^^
+#         print(request.POST)
     template = "create_view.html"
     context = {
         "form":form

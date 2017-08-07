@@ -7,7 +7,7 @@ from django.utils.text import slugify
 class Product(models.Model):
     title = models.CharField(max_length=50)
     slug = models.SlugField(blank=True) #unique=True
-    description = models.TextField(default="This is description will show for default products")
+    description = models.TextField()
     price = models.DecimalField(max_digits = 15, decimal_places=2,default=9.99)
     sale_price = models.DecimalField(max_digits = 15, decimal_places=2,default=9.99,null=True,blank=True)
     def __str__(self):
