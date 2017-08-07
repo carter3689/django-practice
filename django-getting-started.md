@@ -17,10 +17,10 @@
 
 # CRUD
 
-Create -- add item to database
-Retrieve -- get item (s) from the database
-Update -- Make changes/updates to the item(s) in the database
-Delete -- delete item from database
+Create -- add item to database -- POST
+Retrieve -- get item (s) from the database -- detail_view -- GET
+Update -- Make changes/updates to the item(s) in the database -- PATCH / PUT / POST
+Delete -- delete item from database -- DELETE
 
 List -- list all items from database (or a queryset)
 Search -- search items from the database
