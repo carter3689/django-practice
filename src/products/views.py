@@ -1,43 +1,81 @@
 from django.shortcuts import render
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 # Create your views here.
+
+from digitalmarket.mixins import MultiSlugMixin
+
 from .forms import ProductModelForm
 from .models import Product
+
+#Creating a ListView using the Class Based Version of the views
+class ProductDetailView(MultiSlugMixin,DetailView):
+    model = Product
+
+    # def get_object(self,*args, **kwargs):
+    #     print(self.kwargs)
+    #     slug = self.kwargs.get("slug")
+    #     ModelClass = self.model
+    #     if slug is not None:
+    #             try:
+    #                 obj = get_object_or_404(ModelClass,slug=slug)
+    #             except:
+    #                 obj = ModelClass.objects.filter(slug=slug).order_by("title").first()
+    #     else:
+    #         obj = super(ProductDetailView,self).get_object(*args,**kwargs)
+    #     return obj
+
+    def get_context_data(self,**kwargs):
+        context = super(ProductDetailView,self).get_context_data(**kwargs)
+        print(context)
+        return context
+
+#Creating a ListView using the Class Based Version of the views
+class ProductListView(ListView):
+    model = Product
+    # template_name = "list_view.html"
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super(ProductListView,self).get_context_data(**kwargs)
+    #     print(context)
+    #     context["queryset"] = self.get_queryset()
+    #     return context
+
+    def get_queryset(self,*args,**kwargs):
+        qs = super(ProductListView,self).get_queryset(**kwargs) #The super keyword is referring to the parent class - which in the case is ProductListView()
+        return qs
 
 def create_view(request):
     print(request.POST)
     form = ProductModelForm(request.POST or None)
-
-    ### Reference Code ####
-    # if request.method == "POST":
-    #     print(request.POST)
-    #Original form data
-#     if form.is_valid():
-#         # Getting validated data from our POST
-#         data = form.cleaned_data
-#         title = data.get("title")
-#         description = data.get("description")
-#         price = data.get("price")
-#
-#         # Saving the data to our object inside of our PostGreSQL database
-#         # This can be done in two ways actually
-#         """ The first way"""
-#         #new_object = Product.objects.create(title=title,description=description,price=price)
-#
-#         """ OR We could do it this way """
-#         new_object = Product()
-#         new_object.title = title
-#         new_object.description = description
-#         new_object.price = price
-#         new_object.save()
-# # Both of the above solutions work roughly the same way^^
-#         print(request.POST)
-    template = "create_view.html"
+    if form.is_valid():
+        print(form.cleaned_data.get("publish"))
+        instance = form.save(commit=False)
+        instance.sale_price = instance.price
+        instance.save()
+    template = "form.html"
     context = {
         "form":form
     }
     return render(request,template,context)
+
+def update_view(request,object_id=None):
+    print(request)
+    product = get_object_or_404(Product,id=object_id)
+    form = ProductModelForm(request.POST or None, instance=product)
+    if form.is_valid():
+        print(form.cleaned_data.get("publish"))
+        instance = form.save(commit=False)
+        #instance.sale_price = instance.price
+        instance.save()
+    template = "form.html"
+    context = {
+        "object": product,
+        "form":form
+    }
+    return render(request, template, context)
 
 def detail_slug_view(request,slug=None):
     print(request)

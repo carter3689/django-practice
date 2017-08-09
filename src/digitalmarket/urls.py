@@ -17,10 +17,17 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from products import views
 
+from products.views import ProductListView, ProductDetailView
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^create/$', views.create_view, name = "create_view"),
     url(r'^detail/(?P<object_id>\d+)/$', views.detail_view, name = "detail_view"),
+    url(r'^detail/(?P<object_id>\d+)/edit/$', views.update_view, name = "update_view"),
     url(r'^detail/(?P<slug>[\w-]+)/$', views.detail_slug_view, name = "detail_slug_view"),
     url(r'^list/$', views.list_view, name = "list_view"),
+    url(r'^products/list/$',ProductListView.as_view(),name="product_list_view"),
+    url(r'^products/(?P<pk>\d+)/$',ProductDetailView.as_view(),name= "product_detail_view"),
+    url(r'^products/(?P<slug>[\w-]+)/$',ProductDetailView.as_view(),name= "product_detail_view"),
 ]
