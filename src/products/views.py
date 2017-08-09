@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView,UpdateView
 from django.views.generic.list import ListView
 # Create your views here.
 
@@ -10,22 +11,30 @@ from digitalmarket.mixins import MultiSlugMixin
 from .forms import ProductModelForm
 from .models import Product
 
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = "form.html"
+    form_class = ProductModelForm
+    success_url = "/products/add/"
+
+    def get_context_data(self,*args,**kwargs):
+        context = super(ProductCreateView,self).get_context_data(*args,**kwargs)
+        context["submit_btn"] = "Add Product"
+        return context
+
+class ProductUpdateView(MultiSlugMixin,UpdateView):
+    model = Product
+    template_name = "form.html"
+    form_class = ProductModelForm
+    success_url = "/products/list/"
+
+    def get_context_data(self,*args,**kwargs):
+        context = super(ProductUpdateView,self).get_context_data(*args,**kwargs)
+        context["submit_btn"] = "Add Product"
+        return context
 #Creating a ListView using the Class Based Version of the views
 class ProductDetailView(MultiSlugMixin,DetailView):
     model = Product
-
-    # def get_object(self,*args, **kwargs):
-    #     print(self.kwargs)
-    #     slug = self.kwargs.get("slug")
-    #     ModelClass = self.model
-    #     if slug is not None:
-    #             try:
-    #                 obj = get_object_or_404(ModelClass,slug=slug)
-    #             except:
-    #                 obj = ModelClass.objects.filter(slug=slug).order_by("title").first()
-    #     else:
-    #         obj = super(ProductDetailView,self).get_object(*args,**kwargs)
-    #     return obj
 
     def get_context_data(self,**kwargs):
         context = super(ProductDetailView,self).get_context_data(**kwargs)
@@ -35,13 +44,6 @@ class ProductDetailView(MultiSlugMixin,DetailView):
 #Creating a ListView using the Class Based Version of the views
 class ProductListView(ListView):
     model = Product
-    # template_name = "list_view.html"
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super(ProductListView,self).get_context_data(**kwargs)
-    #     print(context)
-    #     context["queryset"] = self.get_queryset()
-    #     return context
 
     def get_queryset(self,*args,**kwargs):
         qs = super(ProductListView,self).get_queryset(**kwargs) #The super keyword is referring to the parent class - which in the case is ProductListView()

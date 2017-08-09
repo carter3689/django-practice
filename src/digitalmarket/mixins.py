@@ -13,5 +13,5 @@ class MultiSlugMixin(object):
                 except:
                     obj = ModelClass.objects.filter(slug=slug).order_by("title").first()
         else:
-            obj = super(ProductDetailView,self).get_object(*args,**kwargs)
+            obj = super(MultiSlugMixin,self).get_object(*args,**kwargs)
         return obj

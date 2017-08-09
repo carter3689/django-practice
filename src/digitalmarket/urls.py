@@ -17,7 +17,7 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from products import views
 
-from products.views import ProductListView, ProductDetailView
+from products.views import ProductListView, ProductDetailView, ProductCreateView,ProductUpdateView
 
 
 urlpatterns = [
@@ -28,6 +28,9 @@ urlpatterns = [
     url(r'^detail/(?P<slug>[\w-]+)/$', views.detail_slug_view, name = "detail_slug_view"),
     url(r'^list/$', views.list_view, name = "list_view"),
     url(r'^products/list/$',ProductListView.as_view(),name="product_list_view"),
+    url(r'^products/add/$',ProductCreateView.as_view(),name="product_create_view"),
     url(r'^products/(?P<pk>\d+)/$',ProductDetailView.as_view(),name= "product_detail_view"),
     url(r'^products/(?P<slug>[\w-]+)/$',ProductDetailView.as_view(),name= "product_detail_view"),
+    url(r'^products/(?P<pk>\d+)/edit/$',ProductUpdateView.as_view(),name= "product_update_view"),
+    url(r'^products/(?P<slug>[\w-]+)/edit/$',ProductUpdateView.as_view(),name= "product_update_view"),
 ]
