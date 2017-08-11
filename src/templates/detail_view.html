@@ -7,5 +7,12 @@
 <h2>Products: {{object.title}}</h2>
 <p>{{object.description}}</p>
 <p>{{object.price}}</p>
+<select class="" name="">
+  {% for vari_choice in object.variation_set.all %}
+      <option value="{{vari_choice.id}}">{{ vari_choice }}</option>
+    {% endfor %}
+</select>
+<p>
+</p>
 {{ block.super }}
 {% endblock content %}

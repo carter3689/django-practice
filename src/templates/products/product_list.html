@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <h1>Store Products</h1>
   {% for instance in object_list  %}
-    <li>{{instance}} - {{instance.description}} - {{instance.price}}</li>
+    <li><a href="{{instance.get_absolute_url}}">{{instance}} - {{instance.description}} - {{instance.price}}</a></li>
     {% empty %}
     <li>  No products yet. </li>
   {% endfor %}
