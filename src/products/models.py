@@ -87,3 +87,20 @@ def product_variatin_post_save_receiver(sender,instance,created,*args,**kwargs):
     print(created)
 
 post_save.connect(product_variatin_post_save_receiver, sender = Product)
+
+
+# Product Images
+
+def image_upload_to(instance, filename):
+	title = instance.product.title
+	slug = slugify(title)
+	basename, file_extension = filename.split(".")
+	new_filename = "%s-%s.%s" %(slug, instance.id, file_extension)
+	return "products/%s/%s" %(slug, new_filename)
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product)
+    image = models.ImageField(upload_to=image_upload_to)
+
+    def __str__(self):
+        return self.product.title

@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Product, Variation
-
+from .models import Product, Variation, ProductImage
 class ProductAdmin(admin.ModelAdmin):
     list_display = ["__str__","description","price","sale_price"]
     search_fields = ["description","title"]
@@ -16,3 +15,4 @@ class VariationAdmin(admin.ModelAdmin):
 
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Variation,VariationAdmin)
+admin.site.register(ProductImage)
