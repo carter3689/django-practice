@@ -28,6 +28,15 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#'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'
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = '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'
+
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+
+send_mail("Your Subject", "This is a simple text email body.",
+  "Joel Carter <joelc@codingtemple.com>", ["joelc@codingtemple.com"])
 
 # Application definition
 
@@ -38,8 +47,37 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.instagram',
+    'allauth.socialaccount.providers.twitter',
+    'crispy_forms',
+
     'products',
 ]
+
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+LOGIN_REDIRECT_URL = "/"
+
+CRISPY_TEMPLATE_PACK = "bootstrap3"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -135,3 +173,26 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_pro","media_root") # This may be needed for deployment. But so far this is what we are using to save our image files
+
+#http://localhost:8000/accounts/facebook/login/callback/
+SOCIALACCOUNT_PROVIDERS = \
+    {'facebook':
+       {'METHOD': 'oauth2',
+        'SCOPE': ['email', 'public_profile', 'user_friends'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC':  lambda request: 'en_US',
+        'VERIFIED_EMAIL': True,
+        'VERSION': 'v2.4'}}

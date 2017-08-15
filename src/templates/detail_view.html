@@ -1,5 +1,5 @@
 {% extends "base.html"%}
-
+{% load staticfiles %}
 
 {% block content %}
 <div class="row">
@@ -11,8 +11,6 @@
 
     <div>
     {% for img in object.productimage_set.all %}
-    {{img.image.file}}
-    {{img.image.url}}
     <img class='img-responsive' src='{{ img.image.url }}' />
 
     {% endfor %}
