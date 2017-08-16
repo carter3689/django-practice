@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 #'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'
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
-SENDGRID_API_KEY = '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'
+SENDGRID_API_KEY = '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'
 
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'crispy_forms',
 
     'products',
+    'carts',
 ]
 
 
@@ -116,9 +117,9 @@ WSGI_APPLICATION = 'digitalmarket.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ebiamjhy',
-        'USER': 'ebiamjhy',
-        'PASSWORD': 'St7jFqVXqIKugD0qFql1R1I_glZuSbzS',
+        'NAME': 'eawxpuyb',
+        'USER': 'eawxpuyb',
+        'PASSWORD': 'nuT0DSOBNNFUEJ8GhgErloK6cKiwC5G_',
         'HOST': 'hard-plum.db.elephantsql.com',
         'PORT': '5432',
     }

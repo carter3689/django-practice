@@ -18,6 +18,7 @@ from django.conf.urls.static import static
 from django.conf.urls import url,include
 from django.contrib import admin
 from products import views
+from carts.views import CartView
 
 from products.views import ProductListView, ProductDetailView, ProductCreateView,ProductUpdateView
 
@@ -36,6 +37,8 @@ urlpatterns = [
     url(r'^products/(?P<pk>\d+)/edit/$',ProductUpdateView.as_view(),name= "product_update_view"),
     url(r'^products/(?P<slug>[\w-]+)/edit/$',ProductUpdateView.as_view(),name= "product_update_view"),
     url(r'^accounts/', include('allauth.urls')),
+    #Cart View
+    url(r'^cart/$',CartView.as_view(), name = "cart")
 ]
 
 
