@@ -31,25 +31,25 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("detail_slug_view", kwargs = {"slug":self.slug})
 
-        def product_pre_save_reciever(sender,instance, *args, **kwargs):
-            print(sender)
-            print(instance)
-            # Let's check to make sure a slug isn't already available
-            # If it is, we probably don't want to change that
-            if not instance.slug:
-                instance.slug = slugify(instance.title)
+def product_pre_save_reciever(sender,instance, *args, **kwargs):
+    print(sender)
+    print(instance)
+    # Let's check to make sure a slug isn't already available
+    # If it is, we probably don't want to change that
+    if not instance.slug:
+        instance.slug = slugify(instance.title)
 
-                pre_save.connect(product_pre_save_reciever, sender=Product)
+pre_save.connect(product_pre_save_reciever, sender=Product)
 
-                """ Either way will work. Doing the slugify pre_save will be a bit cleaner
-                IMO, but either way will get the job done"""
+""" Either way will work. Doing the slugify pre_save will be a bit cleaner
+IMO, but either way will get the job done"""
 
-                # def product_post_save_reciever(sender,instance, *args, **kwargs):
-                #     if instance.slug !=  slugify(instance.title):
-                #         instance.slug = slugify(instance.title)
-                #         instance.save()
-                #
-                # post_save.connect(product_pre_save_reciever, sender=Product)
+# def product_post_save_reciever(sender,instance, *args, **kwargs):
+#     if instance.slug !=  slugify(instance.title):
+#         instance.slug = slugify(instance.title)
+#         instance.save()
+#
+# post_save.connect(product_pre_save_reciever, sender=Product)
 
 class Variation(models.Model):
     product = models.ForeignKey(Product)
@@ -66,10 +66,19 @@ class Variation(models.Model):
         if self.sale_price is not None:
             return self.sale_price
         else:
-            return price
+            return self.price
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()
+
+    def add_to_cart(self):
+        return "%s/?item=%s&qty=1" %(reverse("cart"),self.id)
+
+    def remove_from_cart(self):
+        return "%s/?item=%s&qty=1&delete=True" %(reverse("cart"),self.id)
+
+    def get_title(self):
+        return "%s - %s" %(self.product.title, self.title)
 
 def product_variatin_post_save_receiver(sender,instance,created,*args,**kwargs):
     print(sender)
