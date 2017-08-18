@@ -1,5 +1,38 @@
 {% extends "base.html" %}
 
+<script type="text/javascript">
+
+{% block JQuery %}
+$("#item-qty").change(function(){
+  //event.preventDefault()
+  var item = $("#item-qty").val();
+  var qty = $(this).val()
+  var data = {
+    "item":item,
+    "qty":qty,
+
+  }
+  console.log(data)
+
+  //TODO Add AJAX call for form
+  $.ajax({
+    type: "GET",
+    url: {% url 'cart' %},
+    data: data,
+    success: function(data){
+      $("#Jquery-message").text("Added " + data.created + "Deleted " + data.deleted).show()
+      console.log(data)
+    },
+    error:function(response,error){
+      console.log(response)
+      console.log(error)
+      $("#add-form").submit()
+    }
+  });
+});
+
+{% endblock JQuery %}
+</script>
 
 
 {% block content %}
@@ -12,7 +45,7 @@
 <form action= "." method = "GET">
   <td>{{ item.item.get_title }}</td>
   <input type='hidden' name='item' value='{{ item.item.id }}' />
-  <td><input type="number" name="qty" value="{{ item.quantity }}"><input type='submit' class='btn-update btn btn-link' value='Update item'/></td>
+  <td><input id = "item-qty" type="number" name="qty" value="{{ item.quantity }}"><input type='submit' class='btn-update btn btn-link' value='Update item'/></td>
 
   <td>{{ item.line_item_total}}</td>
   <td class="text-right"><a href="{{item.remove}}">{{item.remove}}</a></td>
@@ -22,7 +55,7 @@
 {% endfor %}
 
 <tr>
-<td colspan='4' class='text-right'>Subtotal: {{ object.update_subtotal }}</td>
+<td colspan='4' class='text-right'>Subtotal: {{ object.subtotal }}</td>
 
 </tr>
 

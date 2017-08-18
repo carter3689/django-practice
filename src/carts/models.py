@@ -46,13 +46,14 @@ class Cart(models.Model):
         return str(self.id) # Cast the ID of the cart as a string when returned.
 
     def update_subtotal(self):
-        		print("updating...")
-        		subtotal = 0
-        		items = self.cartitem_set.all()
-        		for item in items:
-        			subtotal += item.line_item_total
-        		self.subtotal = subtotal
-        		self.save()
+        print("updating...")
+        subtotal = 0
+        items = self.cartitem_set.all()
+        for item in items:
+            subtotal += items.line_item_total
+        self.subtotal = subtotal
+        print(self.subtotal)
+        self.save()
 
 
     # Associate to a user
