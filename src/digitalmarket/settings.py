@@ -35,8 +35,8 @@ SENDGRID_API_KEY = 'SG.ahbXcpMDRd29oaSdSF9lkQ.tbir-fFEXuWKi4wwP709LNhoVmQ-0M7xKa
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 
-send_mail("Your Subject", "This is a simple text email body.",
-  "Joel Carter <joelc@codingtemple.com>", ["joelc@codingtemple.com"])
+# send_mail("Your Subject", "This is a simple text email body.",
+#   "Joel Carter <joelc@codingtemple.com>", ["joelc@codingtemple.com"])
 
 # Application definition
 
@@ -59,6 +59,7 @@ INSTALLED_APPS = [
 
     'products',
     'carts',
+    'orders',
 ]
 
 
