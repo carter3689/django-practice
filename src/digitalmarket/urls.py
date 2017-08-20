@@ -19,6 +19,7 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from products import views
 from carts.views import CartView, CheckoutView
+from orders.views import AddressSelectFormView
 
 from products.views import ProductListView, ProductDetailView, ProductCreateView,ProductUpdateView
 
@@ -40,6 +41,8 @@ urlpatterns = [
     #Cart View
     url(r'^cart/$',CartView.as_view(), name = "cart"),
     url(r'^checkout/$', CheckoutView.as_view(), name='checkout'),
+
+    url(r'^checkout/address/$',AddressSelectFormView.as_view(),name="address_form")
 ]
 
 
