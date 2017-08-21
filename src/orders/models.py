@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+
+from carts.models import Cart
 # Create your models here.
 class UserCheckout(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null= True, blank = True)
@@ -35,12 +37,15 @@ class UserAddress(models.Model):
 
     def __str__(self):
         return self.street
-# class Order(models.Model):
-#     #cart
-#     #user checkout ==> required
-#     #guest noe required
-#     #shipping address
-#     #billing address
-#     #shipping total price
-#     # order totoal (cart total + shipping)
-#     #order_id --> custom_id
+
+class Order(models.Model):
+	cart = models.ForeignKey(Cart)
+	user = models.ForeignKey(UserCheckout)
+	billing_address = models.ForeignKey(UserAddress, related_name='billing_address')
+	shipping_address = models.ForeignKey(UserAddress, related_name='shipping_address')
+	shipping_total_price = models.DecimalField(max_digits=50, decimal_places=2, default=5.99)
+	order_total = models.DecimalField(max_digits=50, decimal_places=2, )
+	#order_id
+
+	def __unicode__(self):
+		return str(self.cart.id)

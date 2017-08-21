@@ -8,7 +8,7 @@ from django.views.generic.edit import FormMixin
 
 from products.models import Variation
 from .models import Cart, CartItem
-from orders.models import UserCheckout
+from orders.models import UserCheckout, Order, UserAddress
 from orders.forms import GuestCheckoutForm
 # Create your views here.
 
@@ -104,10 +104,11 @@ class CheckoutView(FormMixin, DetailView):
 		else:
 			pass
 		if self.request.user.is_authenticated():
-			user_checkout, created = UserCheckout.objects.get_or_create(email=self.request.user)
+			user_checkout, created = UserCheckout.objects.get_or_create(email=self.request.user.email)
 			user_checkout.user = self.request.user
 			user_checkout.save()
 			self.request.session["user_checkout_id"] = user_checkout.id
+
 		context["user_can_continue"] = user_can_continue
 		context["form"] = self.get_form()
 		return context
@@ -125,3 +126,33 @@ class CheckoutView(FormMixin, DetailView):
 
 	def get_success_url(self):
 		return reverse("checkout")
+
+
+	def get(self, request, *args, **kwargs):
+		get_data = super(CheckoutView, self).get(request, *args, **kwargs)
+		cart = self.get_object()
+		user_checkout_id = request.session.get("user_checkout_id")
+		if user_checkout_id != None:
+			user_checkout = UserCheckout.objects.get(id=user_checkout_id)
+			billing_address_id = request.session.get("billing_address_id")
+			shipping_address_id = request.session.get("shipping_address_id")
+
+			if billing_address_id == None or shipping_address_id == None:
+				return redirect("address_form")
+			else:
+				billing_address = UserAddress.objects.get(id=billing_address_id)
+				shipping_address = UserAddress.objects.get(id=shipping_address_id)
+
+			try:
+				new_order_id = request.session["order_id"]
+				new_order = Order.objects.get(id=new_order_id)
+			except:
+				new_order = Order()
+				request.session["order_id"] = new_order.id
+
+			new_order.cart = cart
+			new_order.user = user_checkout
+			new_order.billing_address = billing_address
+			new_order.shipping_address = shipping_address
+			new_order.save()
+		return get_data

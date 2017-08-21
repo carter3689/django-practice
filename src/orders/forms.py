@@ -27,5 +27,6 @@ class AddressForm(forms.Form):
         )
     shipping_address = forms.ModelChoiceField(
         queryset=UserAddress.objects.filter(address_type="shipping"),
-        empty_label = None
+        empty_label = None,
+        required=False
         )
