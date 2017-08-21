@@ -104,7 +104,7 @@ class CheckoutView(FormMixin, DetailView):
 		else:
 			pass
 		if self.request.user.is_authenticated():
-			user_checkout, created = UserCheckout.objects.get_or_create(email=self.request.user.email)
+			user_checkout, created = UserCheckout.objects.get_or_create(email=self.request.user)
 			user_checkout.user = self.request.user
 			user_checkout.save()
 			self.request.session["user_checkout_id"] = user_checkout.id

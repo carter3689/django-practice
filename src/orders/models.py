@@ -3,7 +3,7 @@ from django.conf import settings
 
 # Create your models here.
 class UserCheckout(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null= True, blank = True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, null= True, blank = True)
     email = models.EmailField(unique = True)
     #merchant_id
 
@@ -21,7 +21,7 @@ class UserCheckout(models.Model):
 
 ADDRESS_TYPE = (
     ('billing', 'billing'),
-    ('Shipping', 'Shipping'),
+    ('shipping', 'shipping'),
 )
 
 class UserAddress(models.Model):
