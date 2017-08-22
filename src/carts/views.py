@@ -128,6 +128,7 @@ class CheckoutView(CartOrdermixin,FormMixin, DetailView):
                 email=self.request.user.email)
             user_checkout.user = self.request.user
             user_checkout.save()
+            context["client_token"] - user_checkout.get_client_token()
             self.request.session["user_checkout_id"] = user_checkout.id
 
         elif not self.request.user.is_authenticated() and user_check_id == None:
@@ -137,6 +138,9 @@ class CheckoutView(CartOrdermixin,FormMixin, DetailView):
             pass
         if user_check_id != None:
             user_can_continue = True
+            if not self.request.user.is_authenticated(): #GUEST USER - Making sure an authenticated token and a guest user token don't come at the same time
+                user_checkout_2 = UserCheckout.objects.get(id=user_check_id)
+                context["client_token"] = user_checkout_2.get_client_token()
         # This will allow use to show the order in the html.
         context["order"] = self.get_order()
         context["user_can_continue"] = user_can_continue
