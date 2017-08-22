@@ -74,5 +74,8 @@ $("#item-qty").change(function(){
 	<td colspan='4' class='text-right'>Total: <span id='carttotal'>{{ object.total }}</span></td>
 </tr>
 
+<tr>
+	<td colspan='4' class='text-right'><a class="btn btn-warning" href="{% url 'checkout'%}">Checkout</a></td>
+</tr>
 </table>
 {% endblock %}
