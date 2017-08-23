@@ -24,9 +24,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = 'veuk^2)&6gim08rm#w$yl9+ph*6ue02qm4-*emu#y9n$*yk$!p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 #'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'
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
@@ -115,16 +115,21 @@ WSGI_APPLICATION = 'digitalmarket.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eawxpuyb',
-        'USER': 'eawxpuyb',
-        'PASSWORD': 'nuT0DSOBNNFUEJ8GhgErloK6cKiwC5G_',
-        'HOST': 'hard-plum.db.elephantsql.com',
-        'PORT': '5432',
-    }
-}
+# NEEDED FOR AMAZON S3
+AWS_ACCESS_KEY_ID = "AKIAJXJIB6ONJHDWQWZA"
+AWS_SECRET_ACCESS_KEY = "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"
+
+if 'RDS_DB_NAME' in os.environ:
+	DATABASES = {
+	    'default': {
+	        'ENGINE': 'django.db.backends.mysql',
+	        'NAME': os.environ['RDS_DB_NAME'],
+	        'USER': os.environ['RDS_USERNAME'],
+	        'PASSWORD': os.environ['RDS_PASSWORD'],
+	        'HOST': os.environ['RDS_HOSTNAME'],
+	        'PORT': os.environ['RDS_PORT'],
+	    }
+	}
 
 
 # Password validation
@@ -200,7 +205,7 @@ SOCIALACCOUNT_PROVIDERS = \
         'VERSION': 'v2.4'}}
 
 #Braintree Setup
-BRAINTREE_PUBLIC = 'PUBLIC_KEY'
-BRAINTREE_PRIVATE = 'PRIVATE_KEY'
-BRAINTREE_MERCHANT_ID = 'MERCHANT_ID'
+BRAINTREE_PUBLIC = 'r6k25wjjgrs85k5k'
+BRAINTREE_PRIVATE = '3e8a367a637ec65a728e2c17e582e6bb'
+BRAINTREE_MERCHANT_ID = '34hkzh8p357qypjk'
 ENVIRONMENT = 'SANDBOX'

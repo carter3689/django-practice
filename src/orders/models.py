@@ -12,13 +12,6 @@ from carts.models import Cart
 import braintree
 
 if settings.DEBUG:
-    braintree.Configuration.configure(
-    braintree.Environment.Sandbox,
-    'MERCHANT_ID',
-    'PUBLIC_KEY',
-    'MERCHANT_ID'
-)
-
     braintree.Configuration.configure(braintree.Environment.Sandbox,
                                       merchant_id = settings.BRAINTREE_MERCHANT_ID,
                                       public_key = settings.BRAINTREE_PUBLIC,
@@ -53,7 +46,7 @@ class UserCheckout(models.Model):
             "customer_id" :customer_id
             })
             return client_token
-            return None
+        return None
 
 def update_braintree_id(sender,instance,*args,**kwargs):
     if not instance.braintree_id:
@@ -95,7 +88,7 @@ class UserAddress(models.Model):
 
 ORDER_STATUS_CHOICES= (
         ('created','Created'),
-        ('completed','Completed'),
+        ('paid','Paid'),
         )
 class Order(models.Model):
     status = models.CharField(max_length=120, choices = ORDER_STATUS_CHOICES, default = "created")
@@ -108,13 +101,15 @@ class Order(models.Model):
     shipping_total_price = models.DecimalField(
         max_digits=50, decimal_places=2, default=5.99)
     order_total = models.DecimalField(max_digits=50, decimal_places=2, )
-    # order_id
+    order_id = models.CharField(max_length = 20, null = True, blank = True)
 
     def __str__(self):
         return str(self.cart.id)
 
-    def mark_completed(self):
-        self.status = "completed"
+    def mark_completed(self, order_id = None):
+        self.status = "paid"
+        if order_id and not self.order_id:
+            self.order_id = order_id
         self.save()
 
 def order_pre_save(sender, instance, *args, **kwargs):
